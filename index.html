@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lagrange multipliers, visually</title>
+  <meta name="description" content="Walk along a constraint and watch the
+    gradient of f line up with the gradient of the constraint: where
+    grad f = lambda grad g comes from, and examples in practice.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%230f766e' stroke-width='3'/%3E%3Cpath d='M23.8 8.2 L29 3' stroke='%237c3aed' stroke-width='3'/%3E%3Ccircle cx='23.8' cy='8.2' r='3.2' fill='%231c2230'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Lagrange multipliers, visually</h1>
+    <p class="sub">Walk along a constraint: at its best points, the
+      gradient of <i>f</i> lines up with the gradient of the
+      constraint.</p>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-mode="walk">Walk the
+        constraint</button>
+      <button class="tab" role="tab" data-mode="examples">In
+        practice</button>
+    </nav>
+  </header>
+
+  <section class="intro card" data-show="walk">
+    <div>
+      <h2>Optimize along a path: where &nabla;<i>f</i> =
+        <i>&lambda;</i>&nabla;<i>g</i> comes from</h2>
+      <p class="goal problem"><b>Problem:</b> find the max or min of
+        <i>f</i>(<b>x</b>) while staying on the path <i>g</i>(<b>x</b>) = 0.
+        Setting &nabla;<i>f</i> = <b>0</b> doesn't work: at the best point
+        on the path, &nabla;<i>f</i> is usually not <b>0</b>, since stepping
+        off the path could still raise <i>f</i>. Here <i>f</i>(<b>x</b>) =
+        <i>x</i><sub>0</sub><i>x</i><sub>1</sub> and the path is the unit
+        circle, <i>g</i>(<b>x</b>) = <i>x</i><sub>0</sub><sup>2</sup> +
+        <i>x</i><sub>1</sub><sup>2</sup> &minus; 1 = 0.</p>
+      <p class="goal approach"><b>Approach:</b> walk along the path and
+        ask when no step along it raises <i>f</i>.</p>
+      <ol class="steps">
+        <li>Walking in a unit direction <b>u</b> changes <i>f</i> at rate
+          <b>u</b> &middot; &nabla;<i>f</i>. Let <b>u</b> point along the
+          path: that rate is the <span class="along-t">red</span> arrow, and
+          the slope of the plot on the right.</li>
+        <li>If <b>u</b> &middot; &nabla;<i>f</i> &ne; 0, <i>f</i> rises one
+          way along the path and falls the other, so <b>x</b> is not a max
+          or a min. At a constrained max or min, &nabla;<i>f</i> &perp;
+          path.</li>
+        <li>&nabla;<i>g</i> &perp; path everywhere on it: <i>g</i> stays 0
+          along the path, so <b>u</b> &middot; &nabla;<i>g</i> = 0.</li>
+      </ol>
+      <p>In 2D, two vectors perpendicular to the same path are
+        parallel:</p>
+      <div class="formula">
+        &nabla;<i>f</i>(<b>x</b>) = <i>&lambda;</i> &nabla;<i>g</i>(<b>x</b>)
+        <span class="sep"></span> <i>g</i>(<b>x</b>) = 0
+      </div>
+      <p class="muted">Three equations (two rows of the first, and the
+        constraint) in three unknowns: <i>x</i><sub>0</sub>,
+        <i>x</i><sub>1</sub> and the multiplier <i>&lambda;</i> (Lagrange
+        1788). Each row of the first asks for a <i>&lambda;</i>; the
+        readout shows both, and they agree only where &nabla;<i>f</i> and
+        &nabla;<i>g</i> are parallel.</p>
+    </div>
+    <div>
+      <h3>Try this</h3>
+      <ul class="try">
+        <li>Drag the point around the circle. Where does the red arrow
+          vanish? Find all four places.
+          <details class="answer"><summary>Answer</summary>At
+            (&plusmn;1/&radic;2, &plusmn;1/&radic;2). With
+            <i>x</i><sub>0</sub>, <i>x</i><sub>1</sub> the same sign they
+            are maxima (<i>f</i> = 1/2); with opposite signs, minima
+            (<i>f</i> = &minus;1/2). At each one the level set of <i>f</i>
+            through the point touches the circle without crossing
+            it.</details>
+        </li>
+        <li>Press <em>Climb</em> from a few starting points. Where does it
+          stop, and why there?
+          <details class="answer"><summary>Answer</summary>Climb steps
+            along the red arrow, so it stops exactly where the red arrow is
+            <b>0</b>: where &nabla;<i>f</i> has no part along the path. That
+            is a constrained max (a min, for <em>Descend</em>).</details>
+        </li>
+        <li>Turn on <em>Level sets of g</em>. What angle does &nabla;<i>g</i>
+          make with them?
+          <details class="answer"><summary>Answer</summary>A right angle,
+            always: <i>g</i> doesn't change along its own level set, so
+            &nabla;<i>g</i> has no part along it. The circle is the level
+            set <i>g</i> = 0.</details>
+        </li>
+        <li>Compare the two rows' <i>&lambda;</i> at a max, then at a min.
+          Why is <i>&lambda;</i> negative at a min?
+          <details class="answer"><summary>Answer</summary>At a max
+            <i>f</i> grows outward, the way <i>g</i> grows, so
+            &nabla;<i>f</i> and &nabla;<i>g</i> point the same way
+            (<i>&lambda;</i> = 1/2). At a min <i>f</i> grows inward
+            (<i>&lambda;</i> = &minus;1/2). Writing the constraint as 1
+            &minus; <i>x</i><sub>0</sub><sup>2</sup> &minus;
+            <i>x</i><sub>1</sub><sup>2</sup> = 0 would flip every sign, so
+            for an equality the sign alone means nothing. For an
+            inequality it does: see the last example on <em>In
+            practice</em>.</details>
+        </li>
+        <li>Switch to 3D and follow the path lifted onto the surface.
+          <details class="answer"><summary>Answer</summary>Its high and
+            low points are the answers. The surface is a saddle: off the
+            path, <i>f</i> has no max or min at all.</details>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="intro card" data-show="examples" id="ex-intro"></section>
+
+  <main class="panel" data-show="walk">
+    <div class="card plot">
+      <div class="plot-head">
+        <h3><i>f</i> and the path <i>g</i>(<b>x</b>) = 0</h3>
+        <div class="seg small" role="radiogroup">
+          <button data-wk-view="contour" role="radio">Contour</button>
+          <button data-wk-view="3d" role="radio">3D</button>
+        </div>
+      </div>
+      <svg id="wk-surf" aria-label="contour map of f with the constraint
+        path"></svg>
+      <p class="key">
+        <span><i class="ln fgrad"></i> &nabla;<i>f</i></span>
+        <span><i class="ln agrad"></i> &nabla;<i>g</i></span>
+        <span><i class="ln along"></i> part of &nabla;<i>f</i> along the
+          path</span>
+        <span><i class="ln cpath"></i> path</span>
+        <span><i class="ln here"></i> level set of <i>f</i> through the
+          point</span>
+      </p>
+      <p class="hint" id="wk-hint"></p>
+    </div>
+
+    <div class="col">
+      <div class="card plot">
+        <div class="plot-head">
+          <h3><i>f</i> along the path</h3>
+        </div>
+        <svg id="wk-path" aria-label="f against distance along the
+          path"></svg>
+        <p class="hint">The path unrolled: <i>f</i> against the distance
+          <i>s</i> walked from the mark <i>s</i> = 0. The red line's slope
+          is <b>u</b> &middot; &nabla;<i>f</i>, the red arrow's length. Drag
+          here too.</p>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="card controls">
+        <div class="buttons">
+          <button id="wk-climb" class="primary"
+            title="Walk along the path the way f rises">&#9650; Climb</button>
+          <button id="wk-descend" title="Walk along the path the way f
+            falls">&#9660; Descend</button>
+        </div>
+        <div class="checks one">
+          <label class="check"><input type="checkbox" id="wk-split"> Split
+            &nabla;<i>f</i> along / across the path</label>
+          <label class="check"><input type="checkbox" id="wk-flevel"> Level
+            set of <i>f</i> through the point</label>
+          <label class="check"><input type="checkbox" id="wk-glevels">
+            Level sets of <i>g</i></label>
+          <label class="check"><input type="checkbox" id="wk-crit"> Mark
+            the solutions</label>
+        </div>
+      </div>
+      <div class="card readout" id="wk-readout"></div>
+    </aside>
+  </main>
+
+  <main class="panel" data-show="examples">
+    <div class="card plot">
+      <div class="plot-head">
+        <h3><i>f</i> and the constraint</h3>
+        <div class="seg small" role="radiogroup">
+          <button data-ex-view="contour" role="radio">Contour</button>
+          <button data-ex-view="3d" role="radio">3D</button>
+        </div>
+      </div>
+      <svg id="ex-surf" aria-label="contour map of f with the constraint
+        path"></svg>
+      <p class="key">
+        <span><i class="ln fgrad"></i> &nabla;<i>f</i></span>
+        <span><i class="ln agrad"></i> &nabla;<i>g</i> or
+          &nabla;<i>h</i></span>
+        <span><i class="ln cpath"></i> path</span>
+        <span><i class="ln here"></i> level set of <i>f</i></span>
+        <span><i class="dia max"></i> max</span>
+        <span><i class="dia min"></i> min</span>
+      </p>
+      <p class="hint" id="ex-hint"></p>
+    </div>
+
+    <div class="col">
+      <div class="card plot">
+        <div class="plot-head">
+          <h3><i>f</i> along the path</h3>
+        </div>
+        <svg id="ex-path" aria-label="f against distance along the
+          path"></svg>
+      </div>
+      <div class="card plot" id="ex-sweep-card">
+        <div class="plot-head">
+          <h3 id="ex-sweep-title"></h3>
+        </div>
+        <svg id="ex-sweep" class="chart" aria-label="the solution against
+          the slider"></svg>
+        <p class="hint" id="ex-sweep-note"></p>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="card controls">
+        <h3>Example</h3>
+        <div class="seg wrap" id="ex-presets" role="radiogroup"></div>
+        <label class="slider" id="ex-slider-row"><span class="tip"
+          tabindex="0" id="ex-slider-name"></span>
+          <input type="range" id="ex-slider">
+          <span id="ex-slider-val" class="val"></span></label>
+        <div class="buttons">
+          <button id="ex-climb" class="primary"
+            title="Walk along the path the way f rises">&#9650; Climb</button>
+          <button id="ex-descend" title="Walk along the path the way f
+            falls">&#9660; Descend</button>
+        </div>
+        <div class="checks one">
+          <label class="check"><input type="checkbox" id="ex-split"> Split
+            &nabla;<i>f</i> along / across the path</label>
+          <label class="check"><input type="checkbox" id="ex-flevel"> Level
+            set of <i>f</i> through the point</label>
+          <label class="check"><input type="checkbox" id="ex-glevels">
+            Level sets of the constraint</label>
+          <label class="check"><input type="checkbox" id="ex-crit"> Mark
+            the solutions</label>
+        </div>
+      </div>
+      <div class="card readout" id="ex-readout"></div>
+    </aside>
+  </main>
+
+  <footer>
+    <a href="https://github.com/matthigger/lagrange">Source on GitHub</a>
+    &middot;
+    <span id="build"></span>
+  </footer>
+
+  <script src="js/version.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/problems.js"></script>
+  <script src="js/path.js"></script>
+  <script src="js/surface.js"></script>
+  <script src="js/pathplot.js"></script>
+  <script src="js/explorer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
