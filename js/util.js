@@ -1,5 +1,5 @@
 // Shared helpers: SVG nodes, pointer coordinates, number formatting,
-// arrows, ticks and small vector math.
+// TeX, arrows, ticks and small vector math.
 
 const SVGNS = "http://www.w3.org/2000/svg";
 
@@ -123,4 +123,16 @@ function segPath(segs) {
 /** SVG points attribute for a list of [x, y]. */
 function ptsAttr(pts) {
   return pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+}
+
+/** TeX typeset by KaTeX; the raw TeX when KaTeX did not load. */
+function texHTML(tex, display = false) {
+  if (!window.katex) return `<code>${tex}</code>`;
+  return katex.renderToString(tex, { displayMode: display,
+    throwOnError: false });
+}
+
+/** HTML with its $...$ spans typeset as inline TeX. */
+function mathHTML(html) {
+  return html.replace(/\$([^$]+)\$/g, (_, tex) => texHTML(tex));
 }

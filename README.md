@@ -20,8 +20,8 @@ demos. Written for DS4400 lesson 15. Two tabs:
   solutions.
 - **In practice** (`#examples`). Six presets, each with its Lagrange
   system and a worked solution: the circle above; the closest point on a
-  line (the SVM margin); the best unit direction (why ∇f is steepest
-  ascent); max variance xᵀΣx on the circle (PCA: eigenvectors, λ = f);
+  line (the SVM margin); the best unit direction w · x (LDA with round
+  classes, w = μ₁ − μ₀); max variance xᵀΣx on the circle (PCA: eigenvectors, λ = f);
   a budget (a slider on B, with f*(B) whose slope is λ); and an
   inequality x₀ + x₁ ≤ c (a slider on c, the infeasible side hatched,
   λ against c with its kink where the constraint turns inactive).
@@ -29,7 +29,9 @@ demos. Written for DS4400 lesson 15. Two tabs:
 Both tabs have a Contour / 3D toggle: the 3D view is an orbitable mesh
 of f with the path drawn on the floor and lifted onto the surface.
 
-Plain HTML/CSS/JS with SVG: no build step and no dependencies.
+Plain HTML/CSS/JS with SVG and no build step. The one dependency is
+KaTeX (from jsdelivr, pinned) for the worked solutions; without it they
+show raw TeX.
 
 ## Run locally
 

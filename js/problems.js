@@ -17,7 +17,9 @@
 //
 // The html fields hold the page text: title, problem, system (the
 // equations of ∇f = λ∇g plus the constraint), solution and try (list
-// items, with answers).
+// items, with answers). The solution is a list of parts: { tex } a
+// displayed derivation, { p } a paragraph and { answer } the closing
+// answer, both with $...$ inline TeX (rendered by KaTeX).
 
 const X0 = "<i>x</i><sub>0</sub>", X1 = "<i>x</i><sub>1</sub>";
 const LAM = "<i>&lambda;</i>", BX = "<b>x</b>", BW = "<b>w</b>";
@@ -113,14 +115,24 @@ const PRESETS = [
         or min; the constraint creates them.`,
       system: `${X1} = 2${LAM}${X0} ${SEP} ${X0} = 2${LAM}${X1} ${SEP}
         ${X0}<sup>2</sup> + ${X1}<sup>2</sup> = 1`,
-      solution: `Multiply the first equation by ${X0} and the second by
-        ${X1}: both left sides become ${X0}${X1}, so
-        2${LAM}${X0}<sup>2</sup> = 2${LAM}${X1}<sup>2</sup>. ${LAM} = 0
-        would force ${BX} = <b>0</b>, which is off the circle, so
-        ${X0}<sup>2</sup> = ${X1}<sup>2</sup> = 1/2 and ${X0} = &plusmn;${X1}
-        = &plusmn;1/&radic;2. Then ${LAM} = ${X1} / (2${X0}) = &plusmn;1/2.
-        Same signs: the max, <i>f</i> = 1/2 (${LAM} = 1/2). Opposite signs:
-        the min, <i>f</i> = &minus;1/2 (${LAM} = &minus;1/2).`,
+      solution: [
+        { tex: String.raw`\begin{aligned}
+          x_0 x_1 &= 2\lambda x_0^2 = 2\lambda x_1^2 \\
+          x_0^2 &= x_1^2 = \tfrac{1}{2} \\
+          \mathbf{x} &= \left(\pm\tfrac{1}{\sqrt{2}},\ \pm\tfrac{1}{\sqrt{2}}\right) \\
+          \lambda &= \frac{x_1}{2x_0} = \pm\tfrac{1}{2} \\
+          f(\mathbf{x}) &= x_0 x_1 = \pm\tfrac{1}{2}
+          \end{aligned}` },
+        { p: String.raw`The first line multiplies the first condition by
+          $x_0$ and the second by $x_1$. The second divides by $2\lambda$
+          ($\lambda = 0$ would force $\mathbf{x} = \mathbf{0}$, off the
+          circle) and uses $x_0^2 + x_1^2 = 1$.` },
+        { answer: String.raw`the max $f = \tfrac{1}{2}$ is at
+          $\pm\left(\tfrac{1}{\sqrt{2}},\ \tfrac{1}{\sqrt{2}}\right)$ with
+          $\lambda = \tfrac{1}{2}$; the min $f = -\tfrac{1}{2}$ is at
+          $\pm\left(\tfrac{1}{\sqrt{2}},\ -\tfrac{1}{\sqrt{2}}\right)$ with
+          $\lambda = -\tfrac{1}{2}$.` },
+      ],
       try: [
         `Switch to 3D. Which points of the path lifted onto the surface
           are the answers?
@@ -156,12 +168,24 @@ const PRESETS = [
         = <i>b</i> with ${BW} = (3, 4) and <i>b</i> = 10.`,
       system: `2${X0} = 3${LAM} ${SEP} 2${X1} = 4${LAM} ${SEP}
         3${X0} + 4${X1} = 10`,
-      solution: `The first two say ${BX} = (${LAM}/2)(3, 4): the answer is
-        a multiple of ${BW}. Put it in the constraint: (${LAM}/2)(9 + 16)
-        = 10, so ${LAM} = 0.8 and ${BX} = (1.2, 1.6), at distance
-        &radic;(1.44 + 2.56) = 2 from the origin. In general ${BX} =
-        <i>b</i>${BW} / &Vert;${BW}&Vert;<sup>2</sup>, at distance <i>b</i> /
-        &Vert;${BW}&Vert;: the margin of the SVM lesson.`,
+      solution: [
+        { tex: String.raw`\begin{aligned}
+          \mathbf{x} &= \tfrac{\lambda}{2}\,(3,\ 4) \\
+          3 \cdot \tfrac{3\lambda}{2} + 4 \cdot \tfrac{4\lambda}{2} &= 10 \\
+          \tfrac{25}{2}\,\lambda &= 10 \\
+          \lambda &= 0.8 \\
+          \mathbf{x} &= 0.4\,(3,\ 4) = (1.2,\ 1.6) \\
+          \|\mathbf{x}\| &= \sqrt{1.2^2 + 1.6^2} = \sqrt{4} = 2
+          \end{aligned}` },
+        { p: String.raw`The first line solves the two gradient conditions
+          for $\mathbf{x}$; the second substitutes it into the
+          constraint.` },
+        { answer: String.raw`the closest point is
+          $\mathbf{x} = (1.2,\ 1.6)$, at distance 2, with $\lambda = 0.8$.
+          In general the point of $\mathbf{w} \cdot \mathbf{x} = b$
+          closest to the origin is $b\,\mathbf{w} / \|\mathbf{w}\|^2$, at
+          distance $b / \|\mathbf{w}\|$: the margin of the SVM lesson.` },
+      ],
       try: [
         `The circle had four critical points. Why does this have one?
           <details class="answer"><summary>Answer</summary>The line runs
@@ -173,7 +197,7 @@ const PRESETS = [
   },
   {
     id: "direction",
-    label: "Best direction",
+    label: "Best direction (LDA)",
     startU: 2.2,
     build: () => {
       const n = norm(W_DIR), v = [W_DIR[0] / n, W_DIR[1] / n];
@@ -188,21 +212,36 @@ const PRESETS = [
       };
     },
     html: {
-      title: "Best direction",
-      problem: `Which unit vector ${BX} (&Vert;${BX}&Vert; = 1) makes
-        ${BW} &middot; ${BX} largest, for ${BW} = (2, 1)? Here <i>f</i>(${BX})
-        = 2${X0} + ${X1} is linear, so its level sets are straight
-        lines.`,
+      title: "Best direction (LDA)",
+      problem: `Two classes have means <b>&mu;</b><sub>0</sub> and
+        <b>&mu;</b><sub>1</sub>. Project the data onto a unit vector ${BX}
+        (&Vert;${BX}&Vert; = 1): which ${BX} pushes the projected means
+        furthest apart? Maximize <i>f</i>(${BX}) = ${BW} &middot; ${BX}
+        with ${BW} = <b>&mu;</b><sub>1</sub> &minus; <b>&mu;</b><sub>0</sub>
+        = (2, 1). This is LDA when each class spreads equally in every
+        direction; full LDA also divides by the spread within each class
+        (Fisher 1936).`,
       system: `2 = 2${LAM}${X0} ${SEP} 1 = 2${LAM}${X1} ${SEP}
         ${X0}<sup>2</sup> + ${X1}<sup>2</sup> = 1`,
-      solution: `The first two say ${BX} = ${BW} / (2${LAM}), a multiple
-        of ${BW}. Unit length forces 2${LAM} = &plusmn;&Vert;${BW}&Vert; =
-        &plusmn;&radic;5, so ${BX} = &plusmn;${BW} / &Vert;${BW}&Vert; =
-        &plusmn;(0.894, 0.447) and ${LAM} = &plusmn;&radic;5 / 2 &asymp;
-        &plusmn;1.12. The max, <i>f</i> = &radic;5, is at ${BX} = ${BW} /
-        &Vert;${BW}&Vert;: of all directions, ${BW} &middot; ${BX} grows
-        fastest along ${BW}. With ${BW} = &nabla;<i>f</i>, that is why the
-        gradient is the steepest way uphill.`,
+      solution: [
+        { tex: String.raw`\begin{aligned}
+          \mathbf{x} &= \tfrac{1}{2\lambda}\,(2,\ 1) \\
+          \|\mathbf{x}\|^2 = \tfrac{1}{4\lambda^2}\,(2^2 + 1^2) &= 1 \\
+          \lambda &= \pm\tfrac{\sqrt{5}}{2} \\
+          \mathbf{x} &= \pm\tfrac{1}{\sqrt{5}}\,(2,\ 1)
+            = \pm(0.894,\ 0.447) \\
+          f(\mathbf{x}) &= \pm\tfrac{1}{\sqrt{5}}\,(2 \cdot 2 + 1)
+            = \pm\sqrt{5}
+          \end{aligned}` },
+        { p: String.raw`The first line solves the two gradient conditions
+          for $\mathbf{x}$; the second substitutes it into the
+          constraint.` },
+        { answer: String.raw`the max $f = \sqrt{5} \approx 2.24$ is at
+          $\mathbf{x} = \mathbf{w} / \|\mathbf{w}\|$ with
+          $\lambda = \tfrac{\sqrt{5}}{2}$; the min $f = -\sqrt{5}$ is at
+          $-\mathbf{w} / \|\mathbf{w}\|$. The best direction is the
+          difference of the class means itself.` },
+      ],
       try: [
         `Walk to the max with the level set through the point turned on.
           How does that line meet the circle?
@@ -244,14 +283,28 @@ const PRESETS = [
         projected onto ${BX}.`,
       system: `2<i>&Sigma;</i>${BX} = ${LAM} &middot; 2${BX} ${SEP}
         ${X0}<sup>2</sup> + ${X1}<sup>2</sup> = 1`,
-      solution: `&nabla;<i>f</i> = 2<i>&Sigma;</i>${BX} and &nabla;<i>g</i>
-        = 2${BX}, so the rule reads <i>&Sigma;</i>${BX} = ${LAM}${BX}:
-        ${BX} is an eigenvector of <i>&Sigma;</i> and ${LAM} its
-        eigenvalue. Then <i>f</i> = ${BX}<sup>&#8868;</sup><i>&Sigma;</i>${BX}
-        = ${LAM}${BX}<sup>&#8868;</sup>${BX} = ${LAM}. The eigenvalues are
-        (5 &plusmn; &radic;5) / 2: the max <i>f</i> = 3.62 at ${BX} =
-        &plusmn;(0.851, 0.526), the min <i>f</i> = 1.38 at ${BX} =
-        &plusmn;(0.526, &minus;0.851).`,
+      solution: [
+        { tex: String.raw`\begin{aligned}
+          2\Sigma\mathbf{x} &= 2\lambda\mathbf{x} \\
+          \Sigma\mathbf{x} &= \lambda\mathbf{x} \\
+          \det(\Sigma - \lambda I) = (3 - \lambda)(2 - \lambda) - 1
+            = \lambda^2 - 5\lambda + 5 &= 0 \\
+          \lambda &= \tfrac{5 \pm \sqrt{5}}{2} = 3.62 \text{ or } 1.38 \\
+          x_1 &= (\lambda - 3)\, x_0 \\
+          f(\mathbf{x}) = \mathbf{x}^\top \Sigma \mathbf{x}
+            = \lambda\, \mathbf{x}^\top \mathbf{x} &= \lambda
+          \end{aligned}` },
+        { p: String.raw`The first line is $\nabla f = \lambda \nabla g$
+          with $\nabla f = 2\Sigma\mathbf{x}$ and $\nabla g = 2\mathbf{x}$,
+          so $\mathbf{x}$ is an eigenvector of $\Sigma$ and $\lambda$ its
+          eigenvalue. The fifth line is the first row of
+          $(\Sigma - \lambda I)\mathbf{x} = \mathbf{0}$, and the last uses
+          $\mathbf{x}^\top \mathbf{x} = 1$.` },
+        { answer: String.raw`the max $f = 3.62$ is at
+          $\mathbf{x} = \pm(0.851,\ 0.526)$ and the min $f = 1.38$ at
+          $\mathbf{x} = \pm(0.526,\ -0.851)$: the largest variance is the
+          top eigenvalue, along its eigenvector.` },
+      ],
       try: [
         `Read ${LAM} at each critical point and compare it with <i>f</i>.
           <details class="answer"><summary>Answer</summary>They are equal
@@ -300,13 +353,25 @@ const PRESETS = [
         Maximize <i>f</i> on the budget line ${X0} + 2${X1} = <i>B</i>.`,
       system: `1 / (2&radic;${X0}) = ${LAM} ${SEP} 1 / (2&radic;${X1}) =
         2${LAM} ${SEP} ${X0} + 2${X1} = <i>B</i>`,
-      solution: `The first two give ${X0} = 1 / (4${LAM}<sup>2</sup>) and
-        ${X1} = 1 / (16${LAM}<sup>2</sup>). The budget then reads
-        3 / (8${LAM}<sup>2</sup>) = <i>B</i>, so ${LAM} = &radic;(3 / 8<i>B</i>),
-        ${BX} = (2<i>B</i>/3, <i>B</i>/6) and the best happiness is
-        <i>f</i>* = &radic;(3<i>B</i>/2). Here ${LAM} has a meaning:
-        d<i>f</i>*/d<i>B</i> = ${LAM}, what one more dollar is worth in
-        happiness.`,
+      solution: [
+        { tex: String.raw`\begin{aligned}
+          x_0 &= \tfrac{1}{4\lambda^2}, \qquad x_1 = \tfrac{1}{16\lambda^2} \\
+          x_0 + 2x_1 = \tfrac{1}{4\lambda^2} + \tfrac{2}{16\lambda^2}
+            = \tfrac{3}{8\lambda^2} &= B \\
+          \lambda &= \sqrt{\tfrac{3}{8B}} \\
+          \mathbf{x} &= \left(\tfrac{2B}{3},\ \tfrac{B}{6}\right) \\
+          f^* = \sqrt{\tfrac{2B}{3}} + \sqrt{\tfrac{B}{6}}
+            &= \sqrt{\tfrac{3B}{2}} \\
+          \frac{df^*}{dB} = \tfrac{1}{2}\sqrt{\tfrac{3}{2B}}
+            &= \sqrt{\tfrac{3}{8B}} = \lambda
+          \end{aligned}` },
+        { p: String.raw`The first line solves the two gradient conditions;
+          the second substitutes them into the budget; the last two compute
+          the best happiness $f^*$ and its derivative.` },
+        { answer: String.raw`at $B = 6$, $\mathbf{x} = (4,\ 1)$,
+          $f^* = 3$ and $\lambda = 0.25$. Since $\lambda = df^*/dB$, it is
+          what one more dollar of budget is worth in happiness.` },
+      ],
       try: [
         `At <i>B</i> = 6, read ${LAM}. Then raise <i>B</i> to 7: how much
           does the best <i>f</i> grow?
@@ -362,14 +427,32 @@ const PRESETS = [
         equality and keep it only if ${LAM} &ge; 0.`,
       system: `2(${X0} &minus; 2) = &minus;${LAM} ${SEP} 2(${X1} &minus; 2)
         = &minus;${LAM} ${SEP} ${X0} + ${X1} = <i>c</i>`,
-      solution: `Active case: ${X0} = ${X1} = <i>c</i>/2 and ${LAM} = 4
-        &minus; <i>c</i>. For <i>c</i> = 2: ${BX} = (1, 1) with ${LAM} = 2
-        &ge; 0, so the constraint is active and this is the min. For
-        <i>c</i> = 5: ${LAM} = &minus;1 &lt; 0, so that boundary point is
-        not the min. The unconstrained min (2, 2) is feasible (2 + 2 &le;
-        5): the constraint is inactive and ${LAM} = 0. ${LAM} &ge; 0 says
-        &nabla;<i>f</i> points into the feasible side, so <i>f</i> could
-        only fall by leaving it.`,
+      solution: [
+        { p: String.raw`First suppose the constraint is active, so the min
+          is on the boundary $h(\mathbf{x}) = 0$:` },
+        { tex: String.raw`\begin{aligned}
+          x_0 &= x_1 = 2 - \tfrac{\lambda}{2} \\
+          x_0 + x_1 = 4 - \lambda &= c \\
+          \lambda &= 4 - c, \qquad
+            \mathbf{x} = \left(\tfrac{c}{2},\ \tfrac{c}{2}\right)
+          \end{aligned}` },
+        { p: String.raw`The first line solves the two gradient conditions
+          ($\nabla h = (-1,\ -1)$); the second substitutes into the boundary
+          $x_0 + x_1 = c$. The active solution counts only if
+          $\lambda \ge 0$:` },
+        { tex: String.raw`\lambda = 4 - c \;
+          \begin{cases}
+            \ge 0 \text{ for } c \le 4: & \text{active, }
+              \mathbf{x}^* = \left(\tfrac{c}{2},\ \tfrac{c}{2}\right) \\
+            < 0 \text{ for } c > 4: & \text{inactive, }
+              \mathbf{x}^* = (2,\ 2),\ \lambda = 0
+          \end{cases}` },
+        { p: String.raw`For $c > 4$ the unconstrained min $(2,\ 2)$ is
+          feasible ($2 + 2 \le c$), so it is the answer.` },
+        { answer: String.raw`for $c = 2$, $\mathbf{x}^* = (1,\ 1)$ with
+          $\lambda = 2$; for $c = 5$, $\mathbf{x}^* = (2,\ 2)$ with
+          $\lambda = 0$.` },
+      ],
       try: [
         `Slide <i>c</i> from 0 to 6. Where does ${LAM} reach 0, and what
           happens after?
@@ -377,8 +460,9 @@ const PRESETS = [
           the boundary reaches (2, 2). Past it the constraint is inactive:
           the min stays at (2, 2) and ${LAM} stays 0, the kink in the
           chart.</details>`,
-        `Set <i>c</i> = 5 and walk the point to where the two rows agree
-          on ${LAM}. Why is that point not the answer?
+        `Set <i>c</i> = 5 and walk the point to where &nabla;<i>f</i>
+          lines up with &nabla;<i>h</i>. What is ${LAM} there, and why is
+          that point not the answer?
           <details class="answer"><summary>Answer</summary>There ${LAM} =
           &minus;1 &lt; 0: &nabla;<i>f</i> points out of the feasible side,
           so stepping into it lowers <i>f</i>. The min is inside, at

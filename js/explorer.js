@@ -122,6 +122,10 @@ class Explorer {
     const box = this.$("intro");
     if (box) {
       const h = this.preset.html;
+      const sol = h.solution.map(part => part.tex
+        ? texHTML(part.tex, true)
+        : part.answer ? `<p><b>Answer:</b> ${mathHTML(part.answer)}</p>`
+        : `<p>${mathHTML(part.p)}</p>`).join("");
       box.innerHTML = `
         <div>
           <h2>${h.title}</h2>
@@ -129,8 +133,8 @@ class Explorer {
           <p><b>Lagrange:</b> &nabla;<i>f</i> = <i>&lambda;</i>&nabla;<i>${
             this.prob.gSym}</i>, plus the constraint:</p>
           <div class="formula">${h.system}</div>
-          <details class="answer"><summary>Worked solution</summary>
-            ${h.solution}</details>
+          <details class="answer solution"><summary>Worked
+            solution</summary>${sol}</details>
         </div>
         <div>
           <h3>Try this</h3>

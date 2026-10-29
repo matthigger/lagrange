@@ -53,15 +53,18 @@ path.
 
 ## Tab 2: In practice (`#examples`)
 
-Same explorer, solutions marked by default, a preset picker, and per
-preset an intro (problem, system, worked solution, one or two Try this
-items).
+Same explorer, solutions marked by default, a full-width preset picker
+as the first box under the tabs, and per preset an intro (problem,
+system, worked solution, one or two Try this items). Worked solutions are
+typeset with KaTeX (the page's one dependency, pinned on jsdelivr) in the
+course's solution style: one aligned derivation with every step, one
+sentence naming the steps, then the answer.
 
 | preset | constraint | shows |
 |---|---|---|
 | Saddle on a circle | unit circle | the lecture example, solved |
 | Closest point on a line | 3x₀ + 4x₁ = 10 | ICA 1; x = bw/‖w‖², the SVM margin |
-| Best direction | unit circle | max w · x at w/‖w‖ |
+| Best direction (LDA) | unit circle | max w · x at w/‖w‖, w = μ₁ − μ₀ (LDA with round classes) |
 | Max variance (PCA) | unit circle | Σx = λx, λ = f (lesson 19) |
 | Spending a budget | x₀ + 2x₁ = B, slider B ∈ [2, 8] | λ = df*/dB, chart of f*(B) |
 | Inequality: active? | x₀ + x₁ ≤ c, slider c ∈ [0, 6] | ICA 2; λ = max(0, 4 − c), chart of λ(c) |

@@ -488,8 +488,24 @@ ol.steps li { margin: 3px 0; }
 .key .dia.min { background: #2563eb; }
 .seg.wrap button[aria-checked="true"] { color: #fff; }
 
+/* Full-width example picker above the In practice intro. */
+.picker {
+  max-width: 1312px;
+  margin: 12px auto 0;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.picker h3 { margin: 0; }
+.solution[open] { padding: 6px 14px 4px; }
+.solution p { margin: 6px 0; }
+.solution .katex-display { margin: 8px 0; overflow-x: auto;
+  overflow-y: hidden; }
+
 @media (max-width: 1360px) {
-  .intro { margin-left: 24px; margin-right: 24px; }
+  .intro, .picker { margin-left: 24px; margin-right: 24px; }
 }
 @media (max-width: 1240px) {
   .panel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
@@ -501,5 +517,5 @@ ol.steps li { margin: 3px 0; }
 }
 @media (max-width: 520px) {
   header, main, footer { padding-left: 16px; padding-right: 16px; }
-  .intro { margin-left: 16px; margin-right: 16px; }
+  .intro, .picker { margin-left: 16px; margin-right: 16px; }
 }
