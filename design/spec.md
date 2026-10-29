@@ -44,13 +44,11 @@ perpendicular to it, unchanged. (2) ∇g is always perpendicular to the
 path, else g would change along it. (3) Where ∇f and ∇g line up, ∇f is
 perpendicular to the path too, so f doesn't change along it: a
 constrained max or min. Then the rule. Try this: find the four points
-where the red arrow vanishes; ∇g against the level sets of g; the 3D
-saddle.
+where the red arrow vanishes; Climb from a few starts; the 3D saddle.
 
 Controls: Climb / Descend (projected gradient ascent / descent along the
 path, animated, stopping where the red arrow vanishes or at an open
-path's end), level set of f through the point, level sets of g, mark the
-solutions (all off). ← / → step the point by 1% of the
+path's end) and mark the solutions (off). ← / → step the point by 1% of the
 path.
 
 ## Tab 2: In practice (`#examples`)

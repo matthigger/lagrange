@@ -16,8 +16,8 @@ demos. Written for DS4400 lesson 15. Two tabs:
   along the path. Beside it, the path unrolled: f against arc length s,
   with its tangent line. Climb / Descend walk the point along the red
   arrow until it vanishes. The readout says whether f is rising or flat
-  along the path and whether ∇f = λ∇g, with λ. Toggles: the level set of
-  f through the point, the level sets of g, the solutions.
+  along the path and whether ∇f = λ∇g, with λ. One toggle marks the
+  solutions.
 - **In practice** (`#examples`). Six presets, each with its Lagrange
   system and a worked solution: the circle above; the closest point on a
   line (the SVM margin); the best unit direction (why ∇f is steepest
