@@ -91,6 +91,12 @@ class SurfView {
       this.mid[1] - this.hw + 2 * this.hw * b];
   }
 
+  /** As at, over the 3D mesh's square. */
+  at3(a, b) {
+    return [this.mid3[0] - this.hw3 + 2 * this.hw3 * a,
+      this.mid3[1] - this.hw3 + 2 * this.hw3 * b];
+  }
+
   /** Sample f (and g) over the problem's view; cache the contour picture. */
   sample(prob) {
     this.prob = prob;
@@ -111,6 +117,21 @@ class SurfView {
       }
       return { z, lo, hi };
     };
+    // The 3D mesh may cover a tighter square (view3), so the height
+    // spans what f does near the path rather than at far corners.
+    const v3 = prob.view3 || prob.view;
+    this.mid3 = v3.mid;
+    this.hw3 = v3.hw;
+    let lo3 = Infinity, hi3 = -Infinity;
+    for (let i = 0; i <= MESH; i++) {
+      for (let j = 0; j <= MESH; j++) {
+        const v = prob.f(this.at3(i / MESH, j / MESH));
+        lo3 = Math.min(lo3, v);
+        hi3 = Math.max(hi3, v);
+      }
+    }
+    this.flo3 = lo3;
+    this.fhi3 = hi3;
     const F = grid(prob.f);
     this.z = F.z;
     this.flo = F.lo;
@@ -163,7 +184,7 @@ class SurfView {
    *
    * Args:
    *   st (object): { prob, table (PathTable), u, mode: "contour" | "3d",
-   *     show: { split, flevel, glevels, crit }, k (arrow pixels per
+   *     show: { flevel, glevels, crit }, k (arrow pixels per
    *     gradient unit), sols: prob.sols, each with its u when on the path }
    */
   render(st) {
@@ -251,7 +272,7 @@ class SurfView {
   }
 
   /**
-   * ∇g, ∇f and (when splitting) ∇f's parts along and across the path, at
+   * ∇g, ∇f and (red) ∇f's part along the path, at
    * the point (px, py). toScreen maps a vector to screen axes (unit
    * scale).
    */
@@ -259,7 +280,6 @@ class SurfView {
     const prob = st.prob, T = st.table.tangent(st.u);
     const gf = prob.gradF(x), gg = prob.gradG(x), m = dot(gf, T);
     const along = [m * T[0], m * T[1]];
-    const across = [gf[0] - along[0], gf[1] - along[1]];
     const draw = (v, cls, label) => {
       let [dx, dy] = toScreen(v).map(c => c * st.k);
       const len = Math.hypot(dx, dy);
@@ -275,10 +295,7 @@ class SurfView {
       }
     };
     draw(gg, "agrad", `∇${prob.gSym}`);
-    if (st.show.split) {
-      draw(across, "across", null);
-      draw(along, "along", null);
-    }
+    draw(along, "along", null);
     draw(gf, "fgrad", "∇f");
   }
 
@@ -343,16 +360,16 @@ class SurfView {
 
   // ------------------------------------------------------------------ 3D
 
-  /** World coordinates: floor in [-1, 1]^2, height 0..0.9 over the view. */
+  /** World coordinates: floor in [-1, 1]^2, height 0..0.9 over the mesh. */
   world(x, lift = 0) {
-    const h = (this.prob.f(x) - this.flo) / (this.fhi - this.flo);
-    return [(x[0] - this.mid[0]) / this.hw, (x[1] - this.mid[1]) / this.hw,
-      0.9 * h + lift];
+    const h = (this.prob.f(x) - this.flo3) / (this.fhi3 - this.flo3);
+    const [X, Y] = this.floor(x);
+    return [X, Y, 0.9 * h + lift];
   }
 
   floor(x) {
-    return [(x[0] - this.mid[0]) / this.hw, (x[1] - this.mid[1]) / this.hw,
-      0];
+    return [(x[0] - this.mid3[0]) / this.hw3,
+      (x[1] - this.mid3[1]) / this.hw3, 0];
   }
 
   project(p) { return orbitProject(this.cam, p); }
@@ -360,7 +377,7 @@ class SurfView {
   draw3d(st) {
     const svg = this.svg, prob = st.prob;
     const Pr = p => { const r = this.project(p); return [r.x, r.y]; };
-    const at = (i, j) => this.at(i / MESH, j / MESH);
+    const at = (i, j) => this.at3(i / MESH, j / MESH);
 
     const fl = node("g", { class: "floor" }, svg);
     node("polygon", { points: ptsAttr([[-1, -1], [1, -1], [1, 1], [-1, 1]]
@@ -401,12 +418,12 @@ class SurfView {
 
     // The gradients live on the floor (the plane of x), drawn after the
     // mesh so it cannot hide them. On the floor a vector of v screen units
-    // at the contour scale spans v / (hw ppu) world units.
+    // at the contour scale spans v / (hw3 ppu) world units.
     this.arrows(node("g", { class: "floor-arrows" }, svg), st, x, base.x,
       base.y, v => {
         const a = this.project([0, 0, 0]);
-        const b = this.project([v[0] / (this.hw * this.ppu),
-          v[1] / (this.hw * this.ppu), 0]);
+        const b = this.project([v[0] / (this.hw3 * this.ppu),
+          v[1] / (this.hw3 * this.ppu), 0]);
         return [b.x - a.x, b.y - a.y];
       });
     this.pathScreen = st.table.pts.map(p => Pr(this.world(p, 0.006)));

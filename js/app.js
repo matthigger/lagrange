@@ -4,9 +4,9 @@
 (function () {
   const TABS = {
     walk: new Explorer("wk", ["circle"],
-      { split: true, flevel: true, glevels: false, crit: false }),
+      { flevel: false, glevels: false, crit: false }),
     examples: new Explorer("ex", PRESETS.map(p => p.id),
-      { split: false, flevel: true, glevels: false, crit: true }),
+      { flevel: false, glevels: false, crit: true }),
   };
   const HASH = { walk: "#walk", examples: "#examples" };
   let mode = "walk";

@@ -7,18 +7,17 @@ the [gradient descent](https://matthigger.github.io/gradient_descent/) and
 [logistic regression](https://matthigger.github.io/logistic_regression/)
 demos. Written for DS4400 lesson 15. Two tabs:
 
-- **Walk the constraint** (`#walk`). Builds the rule ∇f = λ∇g from one
-  argument: walking along the path changes f at rate u · ∇f, so a
-  constrained max or min needs ∇f ⟂ path; ∇g is always ⟂ path; so they
-  are parallel. f = x₀x₁ on the unit circle. A point is dragged along the
-  path (it snaps onto the path, and onto a solution when close). At the
-  point: ∇f, ∇g, and ∇f split into its part along the path (red) and
-  across it. Beside it, the path unrolled: f against arc length s, with
-  the tangent line of slope u · ∇f. Climb / Descend walk the point along
-  the red arrow until it vanishes. The readout solves each row of
-  ∇f = λ∇g for λ; the two agree only where the gradients are parallel.
-  Toggles: the level set of f through the point, the level sets of g, the
-  solutions.
+- **Walk the constraint** (`#walk`). Builds the rule ∇f = λ∇g in three
+  steps: walking perpendicular to ∇f leaves f unchanged; ∇g is always
+  perpendicular to the path (else g would change along it); so where ∇f
+  lines up with ∇g, walking along the path doesn't change f. f = x₀x₁ on
+  the unit circle. A point is dragged along the path (it snaps onto a
+  solution when close). At the point: ∇f, ∇g, and in red the part of ∇f
+  along the path. Beside it, the path unrolled: f against arc length s,
+  with its tangent line. Climb / Descend walk the point along the red
+  arrow until it vanishes. The readout says whether f is rising or flat
+  along the path and whether ∇f = λ∇g, with λ. Toggles: the level set of
+  f through the point, the level sets of g, the solutions.
 - **In practice** (`#examples`). Six presets, each with its Lagrange
   system and a worked solution: the circle above; the closest point on a
   line (the SVM margin); the best unit direction (why ∇f is steepest

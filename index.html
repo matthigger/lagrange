@@ -26,87 +26,52 @@
 
   <section class="intro card" data-show="walk">
     <div>
-      <h2>Optimize along a path: where &nabla;<i>f</i> =
-        <i>&lambda;</i>&nabla;<i>g</i> comes from</h2>
+      <h2>Why &nabla;<i>f</i> = <i>&lambda;</i>&nabla;<i>g</i></h2>
       <p class="goal problem"><b>Problem:</b> find the max or min of
         <i>f</i>(<b>x</b>) while staying on the path <i>g</i>(<b>x</b>) = 0.
-        Setting &nabla;<i>f</i> = <b>0</b> doesn't work: at the best point
-        on the path, &nabla;<i>f</i> is usually not <b>0</b>, since stepping
-        off the path could still raise <i>f</i>. Here <i>f</i>(<b>x</b>) =
-        <i>x</i><sub>0</sub><i>x</i><sub>1</sub> and the path is the unit
-        circle, <i>g</i>(<b>x</b>) = <i>x</i><sub>0</sub><sup>2</sup> +
-        <i>x</i><sub>1</sub><sup>2</sup> &minus; 1 = 0.</p>
-      <p class="goal approach"><b>Approach:</b> walk along the path and
-        ask when no step along it raises <i>f</i>.</p>
+        Here <i>f</i>(<b>x</b>) = <i>x</i><sub>0</sub><i>x</i><sub>1</sub>
+        and the path is the unit circle, <i>g</i>(<b>x</b>) =
+        <i>x</i><sub>0</sub><sup>2</sup> + <i>x</i><sub>1</sub><sup>2</sup>
+        &minus; 1 = 0.</p>
       <ol class="steps">
-        <li>Walking in a unit direction <b>u</b> changes <i>f</i> at rate
-          <b>u</b> &middot; &nabla;<i>f</i>. Let <b>u</b> point along the
-          path: that rate is the <span class="along-t">red</span> arrow, and
-          the slope of the plot on the right.</li>
-        <li>If <b>u</b> &middot; &nabla;<i>f</i> &ne; 0, <i>f</i> rises one
-          way along the path and falls the other, so <b>x</b> is not a max
-          or a min. At a constrained max or min, &nabla;<i>f</i> &perp;
-          path.</li>
-        <li>&nabla;<i>g</i> &perp; path everywhere on it: <i>g</i> stays 0
-          along the path, so <b>u</b> &middot; &nabla;<i>g</i> = 0.</li>
+        <li>Walk along &nabla;<i>f</i> and <i>f</i> goes up; walk against
+          it and <i>f</i> goes down. Walk perpendicular to it and <i>f</i>
+          doesn't change.</li>
+        <li>&nabla;<i>g</i> is always perpendicular to the path. If it
+          weren't, walking along the path would change <i>g</i>, and
+          <i>g</i>(<b>x</b>) wouldn't stay 0.</li>
+        <li>Where &nabla;<i>f</i> and &nabla;<i>g</i> line up (same or
+          opposite direction), we're at a constrained max or min:
+          &nabla;<i>f</i> is perpendicular to the path too (like
+          &nabla;<i>g</i>, step 2), so walking along the path doesn't change
+          <i>f</i> (step 1).</li>
       </ol>
-      <p>In 2D, two vectors perpendicular to the same path are
-        parallel:</p>
       <div class="formula">
         &nabla;<i>f</i>(<b>x</b>) = <i>&lambda;</i> &nabla;<i>g</i>(<b>x</b>)
         <span class="sep"></span> <i>g</i>(<b>x</b>) = 0
       </div>
-      <p class="muted">Three equations (two rows of the first, and the
-        constraint) in three unknowns: <i>x</i><sub>0</sub>,
-        <i>x</i><sub>1</sub> and the multiplier <i>&lambda;</i> (Lagrange
-        1788). Each row of the first asks for a <i>&lambda;</i>; the
-        readout shows both, and they agree only where &nabla;<i>f</i> and
-        &nabla;<i>g</i> are parallel.</p>
     </div>
     <div>
       <h3>Try this</h3>
       <ul class="try">
         <li>Drag the point around the circle. Where does the red arrow
-          vanish? Find all four places.
+          (the part of &nabla;<i>f</i> along the path) vanish? Find all
+          four places.
           <details class="answer"><summary>Answer</summary>At
-            (&plusmn;1/&radic;2, &plusmn;1/&radic;2). With
-            <i>x</i><sub>0</sub>, <i>x</i><sub>1</sub> the same sign they
-            are maxima (<i>f</i> = 1/2); with opposite signs, minima
-            (<i>f</i> = &minus;1/2). At each one the level set of <i>f</i>
-            through the point touches the circle without crossing
-            it.</details>
-        </li>
-        <li>Press <em>Climb</em> from a few starting points. Where does it
-          stop, and why there?
-          <details class="answer"><summary>Answer</summary>Climb steps
-            along the red arrow, so it stops exactly where the red arrow is
-            <b>0</b>: where &nabla;<i>f</i> has no part along the path. That
-            is a constrained max (a min, for <em>Descend</em>).</details>
+            (&plusmn;1/&radic;2, &plusmn;1/&radic;2), where &nabla;<i>f</i>
+            lines up with &nabla;<i>g</i>. Same signs: maxima (<i>f</i> =
+            1/2). Opposite signs: minima (<i>f</i> = &minus;1/2).</details>
         </li>
         <li>Turn on <em>Level sets of g</em>. What angle does &nabla;<i>g</i>
           make with them?
           <details class="answer"><summary>Answer</summary>A right angle,
-            always: <i>g</i> doesn't change along its own level set, so
-            &nabla;<i>g</i> has no part along it. The circle is the level
-            set <i>g</i> = 0.</details>
-        </li>
-        <li>Compare the two rows' <i>&lambda;</i> at a max, then at a min.
-          Why is <i>&lambda;</i> negative at a min?
-          <details class="answer"><summary>Answer</summary>At a max
-            <i>f</i> grows outward, the way <i>g</i> grows, so
-            &nabla;<i>f</i> and &nabla;<i>g</i> point the same way
-            (<i>&lambda;</i> = 1/2). At a min <i>f</i> grows inward
-            (<i>&lambda;</i> = &minus;1/2). Writing the constraint as 1
-            &minus; <i>x</i><sub>0</sub><sup>2</sup> &minus;
-            <i>x</i><sub>1</sub><sup>2</sup> = 0 would flip every sign, so
-            for an equality the sign alone means nothing. For an
-            inequality it does: see the last example on <em>In
-            practice</em>.</details>
+            always (step 2). The circle is the level set <i>g</i> =
+            0.</details>
         </li>
         <li>Switch to 3D and follow the path lifted onto the surface.
           <details class="answer"><summary>Answer</summary>Its high and
-            low points are the answers. The surface is a saddle: off the
-            path, <i>f</i> has no max or min at all.</details>
+            low points are the answers. The surface itself is a saddle,
+            with no max or min at all.</details>
         </li>
       </ul>
     </div>
@@ -145,9 +110,8 @@
         <svg id="wk-path" aria-label="f against distance along the
           path"></svg>
         <p class="hint">The path unrolled: <i>f</i> against the distance
-          <i>s</i> walked from the mark <i>s</i> = 0. The red line's slope
-          is <b>u</b> &middot; &nabla;<i>f</i>, the red arrow's length. Drag
-          here too.</p>
+          <i>s</i> walked from the mark <i>s</i> = 0. Where the red arrow
+          vanishes, this curve is flat. Drag here too.</p>
       </div>
     </div>
 
@@ -160,8 +124,6 @@
             falls">&#9660; Descend</button>
         </div>
         <div class="checks one">
-          <label class="check"><input type="checkbox" id="wk-split"> Split
-            &nabla;<i>f</i> along / across the path</label>
           <label class="check"><input type="checkbox" id="wk-flevel"> Level
             set of <i>f</i> through the point</label>
           <label class="check"><input type="checkbox" id="wk-glevels">
@@ -230,8 +192,6 @@
             falls">&#9660; Descend</button>
         </div>
         <div class="checks one">
-          <label class="check"><input type="checkbox" id="ex-split"> Split
-            &nabla;<i>f</i> along / across the path</label>
           <label class="check"><input type="checkbox" id="ex-flevel"> Level
             set of <i>f</i> through the point</label>
           <label class="check"><input type="checkbox" id="ex-glevels">

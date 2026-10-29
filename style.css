@@ -374,10 +374,7 @@ svg.orbit { cursor: grab; }
 .agrad polygon { fill: var(--g); }
 .along line { stroke: var(--along); stroke-width: 4; }
 .along polygon { fill: var(--along); }
-.across line { stroke: var(--f); stroke-width: 1.6; stroke-dasharray: 4 3;
-  stroke-opacity: .7; }
-.across polygon { fill: var(--f); fill-opacity: .7; }
-.fgrad, .agrad, .along, .across, .sdir { pointer-events: none; }
+.fgrad, .agrad, .along, .sdir { pointer-events: none; }
 .arrow-label {
   font-size: 15px;
   font-weight: 700;

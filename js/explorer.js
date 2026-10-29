@@ -15,7 +15,7 @@ class Explorer {
    * Args:
    *   pf (string): id prefix of the tab's elements
    *   presets (list): preset ids from PRESETS
-   *   show (object): initial { split, flevel, glevels, crit }
+   *   show (object): initial { flevel, glevels, crit }
    */
   constructor(pf, presets, show) {
     this.pf = pf;
@@ -41,7 +41,7 @@ class Explorer {
         this.render();
       };
     }
-    for (const k of ["split", "flevel", "glevels", "crit"]) {
+    for (const k of ["flevel", "glevels", "crit"]) {
       const c = $(k);
       if (!c) continue;
       c.checked = this.show[k];
@@ -111,7 +111,7 @@ class Explorer {
     const every = t.pts.filter((_, i) => i % 20 === 0);
     const gF = med(every.map(x => norm(prob.gradF(x))));
     const gG = med(every.map(x => norm(prob.gradG(x))));
-    this.k = 110 / Math.max(gF, gG, 1e-9);
+    this.k = 85 / Math.max(gF, gG, 1e-9);
     this.maxSlope = Math.max(...t.pts.map((x, i) =>
       Math.abs(dot(prob.gradF(x), t.tangent(t.u[i])))));
     if (keep) this.u = t.wrap(this.u);
@@ -261,42 +261,28 @@ class Explorer {
     const lam = dot(gf, gg) / (ng * ng);
     const row = (k, v) =>
       `<div class="row"><span>${k}</span><span class="val">${v}</span></div>`;
-    const ratio = i => {
-      const a = gf[i], b = gg[i];
-      const r = Math.abs(b) < 1e-12 ? (Math.abs(a) < 1e-9 ? "any" : "none")
-        : fmt(a / b);
-      return row(`row ${i + 1}: <i>&lambda;</i> = ${fmt(a)} &divide; ${
-        fmt(b)}`, r);
-    };
 
-    let walk;
-    if (Math.abs(m) < 1e-3 * this.maxSlope || parallel) {
-      walk = "0: no step along the path raises <i>f</i>";
-    } else {
-      walk = `<i>f</i> rises walking ${m > 0 ? "forward (s grows)"
-        : "backward (s shrinks)"}`;
-    }
+    const flat = parallel || Math.abs(m) < 1e-3 * this.maxSlope;
+    const walk = flat ? "flat" : m > 0 ? "rising as <i>s</i> grows"
+      : "falling as <i>s</i> grows";
 
     let verdict;
     if (!parallel) {
-      verdict = `<p class="status no">No: the rows want different
-        <i>&lambda;</i>, so &nabla;<i>f</i> is not parallel to
-        &nabla;<i>${G}</i>.</p>`;
+      verdict = `<p class="status no">&nabla;<i>f</i> and &nabla;<i>${G}</i>
+        don't line up, so <i>f</i> still changes along the path.</p>`;
+    } else if (prob.ineq && lam < -1e-9) {
+      verdict = `<p class="status warn-st">&nabla;<i>f</i> =
+        <i>&lambda;</i>&nabla;<i>h</i> with <i>&lambda;</i> = ${fmt(lam)}
+        &lt; 0: &nabla;<i>f</i> points out of the feasible side, so this is
+        not the min.</p>`;
     } else {
       const sol = this.sols.find(sl => sl.u !== undefined
         && Math.abs(t.gap(t.sAt(this.u), sl.s)) < 1e-6 * t.L);
-      let what = sol ? `the constrained ${sol.kind}` : "a critical point";
-      if (prob.ineq && lam < -1e-9) {
-        verdict = `<p class="status warn-st">&nabla;<i>f</i> =
-          <i>&lambda;</i>&nabla;<i>h</i> with <i>&lambda;</i> = ${fmt(lam)}
-          &lt; 0: not the min. &nabla;<i>f</i> points out of the feasible
-          side, so stepping in lowers <i>f</i>.</p>`;
-      } else {
-        if (prob.ineq) what = "the min on the boundary (λ ≥ 0)";
-        verdict = `<p class="status yes">Yes: &nabla;<i>f</i> =
-          <i>&lambda;</i>&nabla;<i>${G}</i> with <i>&lambda;</i> = ${
-          fmt(lam)}. This is ${what}.</p>`;
-      }
+      const what = prob.ineq ? "the min on the boundary"
+        : sol ? `the constrained ${sol.kind}` : "a constrained max or min";
+      verdict = `<p class="status yes">&nabla;<i>f</i> =
+        <i>&lambda;</i>&nabla;<i>${G}</i> with <i>&lambda;</i> = ${
+        fmt(lam)}: ${what}.</p>`;
     }
 
     let sols = "";
@@ -314,12 +300,7 @@ class Explorer {
         <span class="fgrad-t">&nabla;<i>f</i> = ${fmtCol(gf)}</span>
         <span class="agrad-t">&nabla;<i>${G}</i> = ${fmtCol(gg)}</span>
       </div>
-      <h3>Along the path</h3>
-      ${row(`<span class="along-t"><b>u</b> &middot; &nabla;<i>f</i></span>`,
-        fmt(m))}
-      <p class="muted">${walk}</p>
-      <h3>Is &nabla;<i>f</i> = <i>&lambda;</i>&nabla;<i>${G}</i>?</h3>
-      ${ratio(0)}${ratio(1)}
+      ${row(`<span class="along-t"><i>f</i> along the path</span>`, walk)}
       ${verdict}
       ${sols}`;
   }

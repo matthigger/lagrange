@@ -20,15 +20,17 @@ class.
   to the nearest path point on screen; it snaps onto a known solution
   within 1.2% of the path length, so the readout can show exact
   agreement.
-- The readout shows λ from each row of ∇f = λ∇g, not just the angle: the
-  two rows asking for different λ is the reason no λ exists. λ's sign is
-  shown; the Walk tab explains it means nothing for an equality, and the
-  inequality preset uses it (λ ≥ 0).
+- Kept simple: no ⟂ symbol (the words "perpendicular" and "line up"),
+  no u · ∇f notation, a short readout (the two gradients, whether f is
+  rising or flat along the path, and ∇f = λ∇g with λ when they line up).
+  λ's sign is shown; the inequality preset uses it (λ ≥ 0).
 - Arc length s, not the curve parameter, on the unrolled plot, so its
-  slope is exactly u · ∇f, the red arrow's length.
+  slope is exactly the red arrow's (signed) length.
 - Contour / 3D toggle on both tabs (as in `gradient_descent`): sampled
   mesh under an orthographic orbit camera, Lambert-shaded, path on the
-  floor and lifted onto the surface; the gradients stay on the floor.
+  floor and lifted onto the surface; the gradients stay on the floor. The
+  mesh may cover a tighter square than the contour map (view3), so its
+  height follows f near the path.
 - Inequality lives in the last preset, not its own tab. Its constraint is
   written h(x) = c − x₀ − x₁ ≥ 0 so that an active min has λ ≥ 0.
 - Cut: typing in your own f and g, more than one constraint (KKT is only
@@ -37,15 +39,18 @@ class.
 ## Tab 1: Walk the constraint (`#walk`)
 
 f = x₀x₁ on x₀² + x₁² = 1 (the lecture's worked example). Intro: the
-problem (∇f = 0 fails on a path), the three-step argument, the rule and the
-equation count. Try this: find the four points where the red arrow
-vanishes; Climb from several starts; ∇g against the level sets of g; λ's
-sign at a max and a min; the 3D saddle.
+problem, then three steps. (1) Along ∇f, f goes up; against it, down;
+perpendicular to it, unchanged. (2) ∇g is always perpendicular to the
+path, else g would change along it. (3) Where ∇f and ∇g line up, ∇f is
+perpendicular to the path too, so f doesn't change along it: a
+constrained max or min. Then the rule. Try this: find the four points
+where the red arrow vanishes; ∇g against the level sets of g; the 3D
+saddle.
 
 Controls: Climb / Descend (projected gradient ascent / descent along the
-path, animated, stopping where u · ∇f = 0 or at an open path's end), split
-∇f along / across (on), level set of f through the point (on), level sets
-of g (off), mark the solutions (off). ← / → step the point by 1% of the
+path, animated, stopping where the red arrow vanishes or at an open
+path's end), level set of f through the point, level sets of g, mark the
+solutions (all off). ← / → step the point by 1% of the
 path.
 
 ## Tab 2: In practice (`#examples`)

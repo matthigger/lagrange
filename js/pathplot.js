@@ -1,5 +1,5 @@
 // The path unrolled: f against arc length s, with the point and the line
-// through it of slope u · ∇f (the part of ∇f along the path). Dragging
+// through it whose slope is the part of ∇f along the path. Dragging
 // moves the point to the s under the pointer.
 //
 // SweepChart is the small chart some examples add: a quantity of the
@@ -74,9 +74,9 @@ class PathPlot {
     node("line", { x1: X(s), x2: X(s), y1: Y(fx), y2: P.y1, class: "mark" },
       g);
     node("circle", { cx: X(s), cy: Y(fx), r: 7, class: "handle" }, g);
-    const tx = clamp(X(s) + 12, P.x0 + 4, P.x1 - 150);
+    const tx = clamp(X(s) + 12, P.x0 + 4, P.x1 - 80);
     text(g, tx, clamp(Y(fx) - 14, P.y0 + 16, P.y1 - 8),
-      `slope u · ∇f = ${fmt(m)}`, { class: "tip-label slope-label" });
+      `slope ${fmt(m)}`, { class: "tip-label slope-label" });
 
     node("rect", { x: P.x0, y: P.y0, width: P.x1 - P.x0,
       height: P.y1 - P.y0, class: "frame" }, svg);

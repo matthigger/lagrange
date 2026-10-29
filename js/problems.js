@@ -6,7 +6,7 @@
 //
 //   { f(x), gradF(x), g(x), gradG(x), gSym,
 //     path: { closed, u0, u1, pos(u) },
-//     view: { mid: [m0, m1], hw },
+//     view: { mid: [m0, m1], hw }, view3?: the same, for the 3D mesh,
 //     sols: [{ x, lam, kind: "max" | "min", inside? }],
 //     ineq?, veil?: [[x0, x1], ...], free?: [x0, x1] }
 //
@@ -34,7 +34,8 @@ const ON_CIRCLE = {
   gradG: x => [2 * x[0], 2 * x[1]],
   gSym: "g",
   path: unitCircle(),
-  view: { mid: [0, 0], hw: 1.3 },
+  view: { mid: [0, 0], hw: 1.6 },
+  view3: { mid: [0, 0], hw: 1.25 },
 };
 
 /** Part of the line p + u d inside the view, as an open path. */
