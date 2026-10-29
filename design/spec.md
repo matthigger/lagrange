@@ -63,8 +63,8 @@ sentence naming the steps, then the answer.
 | preset | constraint | shows |
 |---|---|---|
 | Saddle on a circle | unit circle | the lecture example, solved |
-| Closest point on a line | 3x₀ + 4x₁ = 10 | ICA 1; x = bw/‖w‖², the SVM margin |
-| Best direction (LDA) | unit circle | max w · x at w/‖w‖, w = μ₁ − μ₀ (LDA with round classes) |
+| Closest point on a line | 3x₀ + 4x₁ = 10 | ICA 1; w · x + b = 0 with b = −10, x = −bw/‖w‖², distance \|b\|/‖w‖ |
+| Best direction (LDA) | unit circle | max (μ₁ − μ₀) · x at (μ₁ − μ₀)/‖μ₁ − μ₀‖ (LDA with round classes) |
 | Max variance (PCA) | unit circle | Σx = λx, λ = f (lesson 19) |
 | Spending a budget | x₀ + 2x₁ = B, slider B ∈ [2, 8] | λ = df*/dB, chart of f*(B) |
 | Inequality: active? | x₀ + x₁ ≤ c, slider c ∈ [0, 6] | ICA 2; λ = max(0, 4 − c), chart of λ(c) |

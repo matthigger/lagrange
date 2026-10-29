@@ -165,7 +165,7 @@ const PRESETS = [
         to the origin. Minimize the squared distance <i>f</i>(${BX}) =
         ${X0}<sup>2</sup> + ${X1}<sup>2</sup>: it has the same minimizer as
         the distance and a simpler gradient. The line is ${BW} &middot; ${BX}
-        = <i>b</i> with ${BW} = (3, 4) and <i>b</i> = 10.`,
+        + <i>b</i> = 0 with ${BW} = (3, 4) and <i>b</i> = &minus;10.`,
       system: `2${X0} = 3${LAM} ${SEP} 2${X1} = 4${LAM} ${SEP}
         3${X0} + 4${X1} = 10`,
       solution: [
@@ -182,9 +182,11 @@ const PRESETS = [
           constraint.` },
         { answer: String.raw`the closest point is
           $\mathbf{x} = (1.2,\ 1.6)$, at distance 2, with $\lambda = 0.8$.
-          In general the point of $\mathbf{w} \cdot \mathbf{x} = b$
-          closest to the origin is $b\,\mathbf{w} / \|\mathbf{w}\|^2$, at
-          distance $b / \|\mathbf{w}\|$: the margin of the SVM lesson.` },
+          In general the point of $\mathbf{w} \cdot \mathbf{x} + b = 0$
+          closest to the origin is $-b\,\mathbf{w} / \|\mathbf{w}\|^2$, at
+          distance $|b| / \|\mathbf{w}\|$: the SVM lesson's distance
+          $|\mathbf{w} \cdot \mathbf{x} + b| / \|\mathbf{w}\|$ at
+          $\mathbf{x} = \mathbf{0}$.` },
       ],
       try: [
         `The circle had four critical points. Why does this have one?
@@ -216,8 +218,9 @@ const PRESETS = [
       problem: `Two classes have means <b>&mu;</b><sub>0</sub> and
         <b>&mu;</b><sub>1</sub>. Project the data onto a unit vector ${BX}
         (&Vert;${BX}&Vert; = 1): which ${BX} pushes the projected means
-        furthest apart? Maximize <i>f</i>(${BX}) = ${BW} &middot; ${BX}
-        with ${BW} = <b>&mu;</b><sub>1</sub> &minus; <b>&mu;</b><sub>0</sub>
+        furthest apart? Maximize <i>f</i>(${BX}) =
+        (<b>&mu;</b><sub>1</sub> &minus; <b>&mu;</b><sub>0</sub>) &middot;
+        ${BX}, with <b>&mu;</b><sub>1</sub> &minus; <b>&mu;</b><sub>0</sub>
         = (2, 1). This is LDA when each class spreads equally in every
         direction; full LDA also divides by the spread within each class
         (Fisher 1936).`,
@@ -237,9 +240,10 @@ const PRESETS = [
           for $\mathbf{x}$; the second substitutes it into the
           constraint.` },
         { answer: String.raw`the max $f = \sqrt{5} \approx 2.24$ is at
-          $\mathbf{x} = \mathbf{w} / \|\mathbf{w}\|$ with
+          $\mathbf{x} = (\boldsymbol{\mu}_1 - \boldsymbol{\mu}_0) /
+          \|\boldsymbol{\mu}_1 - \boldsymbol{\mu}_0\|$ with
           $\lambda = \tfrac{\sqrt{5}}{2}$; the min $f = -\sqrt{5}$ is at
-          $-\mathbf{w} / \|\mathbf{w}\|$. The best direction is the
+          the opposite unit vector. The best direction is the
           difference of the class means itself.` },
       ],
       try: [

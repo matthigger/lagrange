@@ -20,8 +20,8 @@ demos. Written for DS4400 lesson 15. Two tabs:
   solutions.
 - **In practice** (`#examples`). Six presets, each with its Lagrange
   system and a worked solution: the circle above; the closest point on a
-  line (the SVM margin); the best unit direction w · x (LDA with round
-  classes, w = μ₁ − μ₀); max variance xᵀΣx on the circle (PCA: eigenvectors, λ = f);
+  line (the SVM margin); the best unit direction (μ₁ − μ₀) · x (LDA
+  with round classes); max variance xᵀΣx on the circle (PCA: eigenvectors, λ = f);
   a budget (a slider on B, with f*(B) whose slope is λ); and an
   inequality x₀ + x₁ ≤ c (a slider on c, the infeasible side hatched,
   λ against c with its kink where the constraint turns inactive).
